@@ -10,7 +10,14 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
+
 class _MainScreenState extends State<MainScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<AppData>(context, listen: false).initalizeFoodCardList();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -43,60 +50,72 @@ class _MainScreenState extends State<MainScreen> {
                       icon: Icons.shopping_cart_outlined, onPressed: () {}),
                 ],
               ),
-              SizedBox(height:30),
+              SizedBox(height: 30),
               Container(
-                  padding: EdgeInsets.all(12),
-                  constraints: BoxConstraints(
-                      maxHeight: 100,
-                  ),
-                  decoration: BoxDecoration(
-                      boxShadow: [
-                    BoxShadow(
+                padding: EdgeInsets.all(12),
+                constraints: BoxConstraints(
+                  maxHeight: 100,
+                ),
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
                         color: Colors.grey.withOpacity(1),
                         blurRadius: 26,
                         offset: Offset(0, 10),
-                    )
-                  ],
-                      image: DecorationImage(
-                          image: AssetImage('images/food.jpg'),
-                          fit: BoxFit.fill),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Hei, Granger', style: TextStyle(fontWeight: FontWeight.bold, fontSize:20)),
-                            SizedBox(height:5),
-                            Text('You have 23 discount tickets!', style:TextStyle(color: Colors.grey, fontSize: 12)),
-                          ],
-                        ),
-                        Image(image: AssetImage('images/logo.png'), fit: BoxFit.contain),
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
+                      )
+                    ],
+                    image: DecorationImage(
+                        image: AssetImage('images/food.jpg'), fit: BoxFit.fill),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Hei, Granger',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20)),
+                          SizedBox(height: 5),
+                          Text('You have 23 discount tickets!',
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 12)),
+                        ],
+                      ),
+                      Image(
+                          image: AssetImage('images/logo.png'),
+                          fit: BoxFit.contain),
+                    ],
                   ),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10)),
+                ),
               ),
               SizedBox(height: 30),
               SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(children: [
-                  Tag(text: 'Recommended'),
-                  SizedBox(width:10),
-                  Tag(text: 'Junk Food'),
-                  SizedBox(width:10),
-                  Tag(text: 'Vegan'),
-                  SizedBox(width:10),
-                  Tag(text: 'Oriental Food'),
-                  SizedBox(width:10),
-                  Tag(text: 'Dessert'),
-                ],)
-              )
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      Tag(text: 'Recommended'),
+                      SizedBox(width: 10),
+                      Tag(text: 'Junk Food'),
+                      SizedBox(width: 10),
+                      Tag(text: 'Vegan'),
+                      SizedBox(width: 10),
+                      Tag(text: 'Oriental Food'),
+                      SizedBox(width: 10),
+                      Tag(text: 'Dessert'),
+                    ],
+                  )),
+              SizedBox(height:30),
+              SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: Provider.of<AppData>(context).foodCards,
+                  ))
             ],
           ),
         ),
@@ -105,26 +124,36 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
+
+
 class Tag extends StatelessWidget {
   String text;
   Tag({required this.text});
   @override
   Widget build(BuildContext context) {
-    print(Provider.of<AppData>(context).foodType == text);
-    print(Provider.of<AppData>(context).foodType);
-    print(text);
+
     return TextButton(
-      style: ButtonStyle(
-        minimumSize: MaterialStatePropertyAll(Size(0,0)),
-        foregroundColor: MaterialStatePropertyAll( Provider.of<AppData>(context).foodType == text ? Colors.white : Colors.black38),
-        shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
-        backgroundColor: MaterialStatePropertyAll(Provider.of<AppData>(context).foodType == text ? Colors.deepOrange : Colors.blueGrey[50]),
-        padding: MaterialStatePropertyAll(EdgeInsets.symmetric(vertical:5, horizontal:10)),
-        textStyle: MaterialStatePropertyAll(TextStyle(fontWeight: FontWeight.w700, fontSize: 12))
-      ),
-      onPressed:(){Provider.of<AppData>(context, listen:false).changeFoodType(text);},
-      child:  Text(text)
-    );
+        style: ButtonStyle(
+            minimumSize: MaterialStatePropertyAll(Size(0, 0)),
+            foregroundColor: MaterialStatePropertyAll(
+                Provider.of<AppData>(context).foodType == text
+                    ? Colors.white
+                    : Colors.black38),
+            shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30))),
+            backgroundColor: MaterialStatePropertyAll(
+                Provider.of<AppData>(context).foodType == text
+                    ? Colors.deepOrange
+                    : Colors.blueGrey[50]),
+            padding: MaterialStatePropertyAll(
+                EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
+            textStyle: MaterialStatePropertyAll(
+                TextStyle(fontWeight: FontWeight.w700, fontSize: 12))),
+        onPressed: () {
+          Provider.of<AppData>(context, listen: false).changeFoodType(text);
+          Provider.of<AppData>(context, listen: false).updateFoodCardList();
+        },
+        child: Text(text));
   }
 }
 
