@@ -2,22 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:food_delivery_app/Widgets.dart';
 import 'package:food_delivery_app/appData.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+import 'package:food_delivery_app/coordinates.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
-
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
-
 class _MainScreenState extends State<MainScreen> {
+  Coordinates coordinates = Coordinates();
+  LocationData? locationData;
+  double lon = 0;
+  double lat = 0;
+
+  Future<void> updateLocationData() async {
+    locationData = await coordinates.getLocationData();
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Provider.of<AppData>(context, listen: false).initalizeFoodCardList();
+
+    updateLocationData().whenComplete(() {
+      setState(() {
+        lat = locationData!.latitude!;
+        lon =locationData!.longitude!;
+        print(lon);
+        print(lat);
+      });
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -75,7 +93,7 @@ class _MainScreenState extends State<MainScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Hei, Granger',
+                          Text('Hi, Granger',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 20)),
                           SizedBox(height: 5),
@@ -110,12 +128,19 @@ class _MainScreenState extends State<MainScreen> {
                       Tag(text: 'Dessert'),
                     ],
                   )),
-              SizedBox(height:30),
+              SizedBox(height: 30),
               SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: Provider.of<AppData>(context).foodCards,
-                  ))
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: Provider.of<AppData>(context).foodCards,
+                ),
+              ),
+              SizedBox(height:30),
+              Container(
+                  height: 300, child: MapScreen(lon: lon, lat: lat )),
+              //Container(
+              //height: 200,
+              // child: MapScreen(locationData: locationData!)),
             ],
           ),
         ),
@@ -124,14 +149,11 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
-
-
 class Tag extends StatelessWidget {
   String text;
   Tag({required this.text});
   @override
   Widget build(BuildContext context) {
-
     return TextButton(
         style: ButtonStyle(
             minimumSize: MaterialStatePropertyAll(Size(0, 0)),
@@ -187,5 +209,24 @@ class IconButtonSmall extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class MapScreen extends StatefulWidget {
+  double lon;
+  double lat;
+  MapScreen({required this.lon, required this.lat});
+
+  @override
+  State<MapScreen> createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return GoogleMap(
+        initialCameraPosition: CameraPosition(
+            target: LatLng(51.5072167, -0.127585 ),
+            zoom: 14));
   }
 }

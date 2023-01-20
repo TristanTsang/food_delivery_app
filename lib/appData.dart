@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/Widgets.dart';
+import 'package:location/location.dart';
 
 class AppData extends ChangeNotifier {
+
   String _foodType = "Recommended";
   static Food cheeseBurger = Food(
     price: 10,
@@ -12,6 +14,9 @@ class AppData extends ChangeNotifier {
     servings: 1,
     genreName: "Junk Food",
     genreImage: AssetImage('images/JunkFood.png'),
+    numReviews: 342,
+    rating:4.3,
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
   );
   static Food salad = Food(
       price: 10,
@@ -20,7 +25,10 @@ class AppData extends ChangeNotifier {
       time: "15 Min",
       servings: 1,
       genreName: "Vegan",
-      genreImage: AssetImage('images/JunkFood.png'));
+      genreImage: AssetImage('images/JunkFood.png'),
+    numReviews: 402,
+    rating:4.7,
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
   static Food sushi = Food(
     price: 30,
     image: AssetImage('images/food.jpg'),
@@ -29,6 +37,9 @@ class AppData extends ChangeNotifier {
     servings: 1,
     genreName: "Oriental Food",
     genreImage: AssetImage('images/OrientalFood.png'),
+    numReviews: 581,
+    rating:4.8,
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
   );
   static Food iceCream = Food(
     price: 5,
@@ -40,6 +51,9 @@ class AppData extends ChangeNotifier {
     genreImage: AssetImage(
       'images/Dessert.png',
     ),
+    numReviews: 1008,
+    rating:3.9,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
   );
 
   static final List<Food> _foods = [cheeseBurger, salad, sushi, iceCream];
@@ -110,6 +124,9 @@ class Food {
   late ImageProvider<Object> _genreImage;
   late String _genreName;
   bool _isFavorite = false;
+  late int _numReviews;
+  late double _rating;
+  late String _description;
 
   Food(
       {required int price,
@@ -118,7 +135,10 @@ class Food {
       required String time,
       required int servings,
       required ImageProvider<Object> genreImage,
-      required String genreName}) {
+      required String genreName,
+      required int numReviews,
+      required double rating,
+      required String description}) {
     _price = price;
     _image = image;
     _name = name;
@@ -126,13 +146,27 @@ class Food {
     _servings = servings;
     _genreImage = genreImage;
     _genreName = genreName;
+    _numReviews = numReviews;
+    _rating = rating;
+    _description = description;
+
   }
 
   void toggleFavorite(){
     _isFavorite = !_isFavorite;
   }
 
+  int get numReviews{
+    return _numReviews;
+  }
 
+  String get description{
+    return _description;
+  }
+
+  double get rating{
+    return _rating;
+  }
 
   String get genreName {
     return _genreName;
