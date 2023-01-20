@@ -99,6 +99,17 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
+  void changeQuanity({required Food food, required int num}){
+    if(food.quantity>0 || num >0){
+      food.quantity += num;
+      notifyListeners();
+    }
+  }
+  int foodQuantity({required Food food}){
+    return food.quantity;
+  }
+
+
   String get foodType {
     return _foodType;
   }
@@ -127,6 +138,7 @@ class Food {
   late int _numReviews;
   late double _rating;
   late String _description;
+  int quantity=0;
 
   Food(
       {required int price,

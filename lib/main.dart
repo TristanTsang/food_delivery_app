@@ -5,6 +5,7 @@ import 'package:food_delivery_app/screen/MainScreen.dart';
 import 'package:provider/provider.dart';
 import 'appData.dart';
 import 'package:food_delivery_app/screen/foodScreen.dart';
+import 'appData.dart';
 void main() {
   runApp( MyApp());
 }
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
             'StartScreen': (context) => StartScreen(),
             'PreferanceScreen': (context) => PreferanceScreen(),
             'MainScreen': (context) => MainScreen(),
-            'FoodScreen': (context) => FoodScreen(food: food),
+            'FoodScreen': (context) => FoodScreen(food: Provider.of<AppData>(context).selectedFoods[0]),
           }
       ),
     );
