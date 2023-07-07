@@ -8,7 +8,7 @@ class AppData extends ChangeNotifier {
   String _foodType = "Recommended";
   static Food cheeseBurger = Food(
     price: 10,
-    image: AssetImage('images/food.jpg'),
+    image: AssetImage('images/burger.jpg'),
     name: "Cheese Burger",
     time: "10 Min",
     servings: 1,
@@ -16,22 +16,24 @@ class AppData extends ChangeNotifier {
     genreImage: AssetImage('images/JunkFood.png'),
     numReviews: 342,
     rating:4.3,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    ingredientImages: [AssetImage("images/Meat.png"), AssetImage("images/carrot.png"), AssetImage("images/lettuce.png"), AssetImage("images/tomato.png"), AssetImage("images/cheese.png")]
   );
   static Food salad = Food(
       price: 10,
-      image: AssetImage('images/food.jpg'),
+      image: AssetImage('images/salad.jpg'),
       name: "Salad",
       time: "15 Min",
       servings: 1,
       genreName: "Vegan",
-      genreImage: AssetImage('images/JunkFood.png'),
+      genreImage: AssetImage('images/lettuce.png'),
     numReviews: 402,
     rating:4.7,
+      ingredientImages: [AssetImage("images/Meat.png"), AssetImage("images/carrot.png"), AssetImage("images/lettuce.png"), AssetImage("images/tomato.png"), AssetImage("images/cheese.png")],
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
   static Food sushi = Food(
     price: 30,
-    image: AssetImage('images/food.jpg'),
+    image: AssetImage('images/sushi.jpeg'),
     name: "Sushi",
     time: "20 Min",
     servings: 1,
@@ -39,11 +41,12 @@ class AppData extends ChangeNotifier {
     genreImage: AssetImage('images/OrientalFood.png'),
     numReviews: 581,
     rating:4.8,
+      ingredientImages: [AssetImage("images/Meat.png"), AssetImage("images/carrot.png"), AssetImage("images/lettuce.png"), AssetImage("images/tomato.png"), AssetImage("images/cheese.png")],
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
   );
   static Food iceCream = Food(
     price: 5,
-    image: AssetImage('images/food.jpg'),
+    image: AssetImage('images/icecream.jpg'),
     name: "Ice Cream",
     time: "10 Min",
     servings: 1,
@@ -53,6 +56,7 @@ class AppData extends ChangeNotifier {
     ),
     numReviews: 1008,
     rating:3.9,
+      ingredientImages: [AssetImage("images/Meat.png"), AssetImage("images/carrot.png"), AssetImage("images/lettuce.png"), AssetImage("images/tomato.png"), AssetImage("images/cheese.png")],
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
   );
 
@@ -127,7 +131,7 @@ class AppData extends ChangeNotifier {
 }
 
 class Food {
-  late int _price;
+  late double _price;
   late ImageProvider<Object> _image;
   late String _name;
   late String _time;
@@ -139,9 +143,11 @@ class Food {
   late double _rating;
   late String _description;
   int quantity=0;
+  late List<ImageProvider<Object>> _ingredientImages;
+
 
   Food(
-      {required int price,
+      {required double price,
       required ImageProvider<Object> image,
       required String name,
       required String time,
@@ -150,7 +156,8 @@ class Food {
       required String genreName,
       required int numReviews,
       required double rating,
-      required String description}) {
+      required String description,
+      required List<ImageProvider<Object>> ingredientImages}) {
     _price = price;
     _image = image;
     _name = name;
@@ -161,7 +168,23 @@ class Food {
     _numReviews = numReviews;
     _rating = rating;
     _description = description;
+    _ingredientImages = ingredientImages;
 
+  }
+// Returns a list of ingredient widgets
+  List<Widget> getIngredientWidgetArray(){
+    List <Widget> temp = [];
+    for(int i=0; i<_ingredientImages.length; i++){
+      temp.add(Container(
+        width:75,
+        height:75,
+        decoration: BoxDecoration(color: Colors.blueGrey[50], borderRadius: BorderRadius.circular(10)),
+        child:  Image(image: _ingredientImages[i], fit: BoxFit.contain, height:10, width:10 )
+      ),
+     );
+    temp.add(SizedBox(width:10));
+    }
+    return temp;
   }
 
   void toggleFavorite(){
@@ -192,7 +215,7 @@ class Food {
     return _image;
   }
 
-  int get price {
+  double get price {
     return _price;
   }
 

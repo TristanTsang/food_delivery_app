@@ -136,6 +136,8 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
               SizedBox(height:30),
+              Text("Near You", style: TextStyle(color:Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
+              SizedBox(height:10),
               Container(
                   height: 300, child: MapScreen(lon: lon, lat: lat )),
               //Container(
@@ -149,84 +151,3 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
-class Tag extends StatelessWidget {
-  String text;
-  Tag({required this.text});
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-        style: ButtonStyle(
-            minimumSize: MaterialStatePropertyAll(Size(0, 0)),
-            foregroundColor: MaterialStatePropertyAll(
-                Provider.of<AppData>(context).foodType == text
-                    ? Colors.white
-                    : Colors.black38),
-            shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30))),
-            backgroundColor: MaterialStatePropertyAll(
-                Provider.of<AppData>(context).foodType == text
-                    ? Colors.deepOrange
-                    : Colors.blueGrey[50]),
-            padding: MaterialStatePropertyAll(
-                EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
-            textStyle: MaterialStatePropertyAll(
-                TextStyle(fontWeight: FontWeight.w700, fontSize: 12))),
-        onPressed: () {
-          Provider.of<AppData>(context, listen: false).changeFoodType(text);
-          Provider.of<AppData>(context, listen: false).updateFoodCardList();
-        },
-        child: Text(text));
-  }
-}
-
-class IconButtonSmall extends StatelessWidget {
-  IconData icon;
-  Function onPressed;
-  IconButtonSmall({required this.icon, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 35,
-      width: 35,
-      padding: EdgeInsets.all(5),
-      child: IconButton(
-        padding: EdgeInsets.zero,
-        onPressed: () {
-          onPressed();
-        },
-        icon: Icon(size: 25, icon),
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(7),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-              color: Colors.grey.withOpacity(0.25),
-              spreadRadius: 2,
-              blurRadius: 10,
-              offset: Offset(0, 0))
-        ],
-      ),
-    );
-  }
-}
-
-class MapScreen extends StatefulWidget {
-  double lon;
-  double lat;
-  MapScreen({required this.lon, required this.lat});
-
-  @override
-  State<MapScreen> createState() => _MapScreenState();
-}
-
-class _MapScreenState extends State<MapScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return GoogleMap(
-        initialCameraPosition: CameraPosition(
-            target: LatLng(51.5072167, -0.127585 ),
-            zoom: 14));
-  }
-}
